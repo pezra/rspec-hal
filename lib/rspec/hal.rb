@@ -1,7 +1,7 @@
 require "rspec/hal/version"
 
-module Rspec
+module RSpec
   module Hal
-    # Your code goes here...
+    autoload :Matchers, "rspec/hal/matchers"
   end
 end

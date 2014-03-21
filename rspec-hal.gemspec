@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Peter Williams"]
   spec.email         = ["pezra@barelyenough.org"]
   spec.summary       = %q{Matchers and helpers for specing HAL documents.}
-  spec.homepage      = ""
+  spec.homepage      = "http://github.com/pezra/rspec-hal"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -18,5 +18,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.5"
-  spec.add_development_dependency "rake"
+  spec.add_development_dependency "rake", "~> 10.1"
+
+  spec.add_runtime_dependency "rspec", "~> 3.0.0.beta"
 end
