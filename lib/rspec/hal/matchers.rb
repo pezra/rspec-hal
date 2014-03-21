@@ -1,4 +1,5 @@
 require 'json'
+require 'hal-client'
 
 module RSpec
   module Hal

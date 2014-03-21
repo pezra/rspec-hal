@@ -21,4 +21,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake", "~> 10.1"
 
   spec.add_runtime_dependency "rspec", "~> 3.0.0.beta"
+  spec.add_runtime_dependency "hal-client", "~> 2.2
+"
 end
