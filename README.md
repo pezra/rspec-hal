@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/pezra/hal-interpretation.png?branch=master)](https://travis-ci.org/pezra/hal-interpretation)
+[![Code Climate](https://codeclimate.com/github/pezra/hal-interpretation.png)](https://codeclimate.com/github/pezra/hal-interpretation)
+
 # Rspec::Hal
 
 TODO: Write a gem description
