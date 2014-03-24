@@ -1,1 +1,1 @@
-require "rspec/hal.rb"
+require "rspec/hal"
