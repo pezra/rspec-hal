@@ -7,6 +7,25 @@ module RSpec
       module Document
         extend RSpec::Matchers::DSL
 
+        # Provide a 3.0 compatible DSL methods for 2.x RSpec.
+        module ForwardCompat
+          def failure_message(&blk)
+            failure_message_for_should(&blk)
+          end
+        end
+
+        # Install 3.0 compatibility layer if needed.
+        class << self
+          def matcher(name, &blk)
+            super name do |*args|
+              extend ForwardCompat unless respond_to? :failure_message
+
+              self.instance_exec *args, &blk
+            end
+          end
+        end
+
+
         # Check that the document provided is a valid HAL document.
         #
         # Signature
