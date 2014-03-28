@@ -88,7 +88,11 @@ module RSpec
           end
 
           chain :matching do |val_pat|
-            @value_matcher = RSpec::Matchers::BuiltIn::Match.new val_pat
+            @value_matcher = if Regexp === val_pat
+                               RSpec::Matchers::BuiltIn::Match.new val_pat
+                             else
+                               val_pat
+                             end
           end
 
           chain :including do |val_pat|
