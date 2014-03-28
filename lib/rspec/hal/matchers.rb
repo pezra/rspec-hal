@@ -69,6 +69,8 @@ module RSpec
         # Signature
         #
         #     expect(a_user_doc).to have_property "name"
+        #     expect(a_user_doc).to have_property("name").that_is("Bob")
+        #     expect(a_user_doc).to have_property("age").that_is kind_of Numeric
         #     expect(a_user_doc).to have_property("name").matching(/bob/i)
         #     expect(a_user_doc).to have_property("hobbies").including(matching("golf"))
         matcher :have_property do |prop_name|
@@ -81,16 +83,27 @@ module RSpec
             __value_matcher === a_doc.fetch(prop_name)
           end
 
+          chain :that_is do |expected_val|
+            @value_matcher = expected_val
+          end
+
           chain :matching do |val_pat|
-            @value_matcher = val_pat
+            @value_matcher = RSpec::Matchers::BuiltIn::Match.new val_pat
           end
 
           chain :including do |val_pat|
             @value_matcher = RSpec::Matchers::BuiltIn::Include.new val_pat
           end
 
+          failure_message do
+            msg = super()
+            if @value_matcher
+              msg + " " + @value_matcher.description.gsub(/^match /, "matching ")
+            end
+          end
+
           define_method(:__value_matcher) do
-            @value_matcher ||=  ->(*_){ true }
+            @value_matcher || ->(*_){ true }
           end
         end
 
@@ -106,11 +119,28 @@ module RSpec
             repr = HalClient::Representation.new(parsed_json: a_doc)
 
             begin
-              repr.related_hrefs(link_rel).any?
+              repr.related_hrefs(link_rel) .any?{|an_href|
+                next true if !defined? @href_matcher
+                @href_matcher === an_href
+              }
             rescue KeyError
               false
             end
           end
+
+          chain :with_href do |expected_href|
+            (fail ArgumentError, "#{expected_href.inspect} must be a matcher") unless expected_href.respond_to? :matches?
+
+            @href_matcher = expected_href
+          end
+
+          failure_message do
+            msg = super()
+            if @href_matcher
+              msg + " with href " + @href_matcher.description.gsub(/^match /, "matching ")
+            end
+          end
+
         end
       end
     end
