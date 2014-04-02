@@ -1,6 +1,27 @@
 require_relative "../../spec_helper"
 require "rspec/version"
 
+describe RSpec::Hal::Matchers do
+  subject { Class.new do
+      include RSpec::Hal::Matchers
+    end.new }
+
+  specify { expect(subject.be_hal).to be_a_matcher }
+  specify { expect(subject.be_hal_collection).to be_a_matcher }
+  specify { expect(subject.have_property("name")).to be_a_matcher }
+  specify { expect(subject.have_templated_relation("search")).to be_a_matcher }
+  specify { expect(subject.have_relation("search")).to be_a_matcher }
+
+  # Background/Support
+  # ---
+
+  matcher :be_a_matcher do
+    match do |actual|
+      respond_to?(:matches?) && respond_to?(:failure_message)
+    end
+  end
+end
+
 describe RSpec::Hal::Matchers::Document do
   describe "be_hal" do
     subject(:matcher) { be_hal }

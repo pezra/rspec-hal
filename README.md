@@ -10,15 +10,15 @@ Provides matchers and convenience methods for verifying HAL documents.
 Include the matchers by adding this to your spec_helper
 
 ```ruby
-RSpec.configuration.include RSpec::Hal::Matchers::Documents
+RSpec.configuration.include RSpec::Hal::Matchers
 ```
 
-(Don't forget to `require rspec-hal` if you are not using bundler.)
+(Don't forget to `require "rspec-hal"` if you are not using bundler.)
 
 If you are using rspec-rails and want only include the matchers for views do this
 
 ```ruby
-RSpec.configuration.include RSpec::Hal::Matchers::Documents, type: 'view'
+RSpec.configuration.include RSpec::Hal::Matchers, type: 'view'
 ```
 
 Once you have the matchers included you can use it like this
