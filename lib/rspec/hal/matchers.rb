@@ -147,6 +147,8 @@ module RSpec
 
         end
       end
+
+      include Document
     end
   end
 end
