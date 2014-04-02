@@ -5,6 +5,7 @@ module RSpec
   module Hal
     module Matchers
       require "rspec/hal/matchers/templated_relation_matcher"
+      require "rspec/hal/matchers/have_property_matcher"
 
       # Examples
       #
@@ -13,6 +14,19 @@ module RSpec
       #
       def have_templated_relation(*args)
         TemplatedRelationMatcher.new(*args)
+      end
+
+      # Signature
+      #
+      #     expect(a_doc).to have_property "name"
+      #     expect(a_doc).to have_property "name, matching(/alice/i)
+      #
+      #     expect(a_doc).to have_property("name").matching(/alice/i)
+      #     expect(a_doc).to have_property("hobbies").including(matching("golf"))
+      #     expect(a_doc).to have_property("name").that_is("Bob")
+      #     expect(a_doc).to have_property("age").that_is kind_of Numeric
+      def have_property(*args)
+        HavePropertyMatcher.new(*args)
       end
 
       module Document
@@ -75,52 +89,6 @@ module RSpec
           end
         end
 
-        # Check that the document has the specified property.
-        #
-        # Signature
-        #
-        #     expect(a_user_doc).to have_property "name"
-        #     expect(a_user_doc).to have_property("name").that_is("Bob")
-        #     expect(a_user_doc).to have_property("age").that_is kind_of Numeric
-        #     expect(a_user_doc).to have_property("name").matching(/bob/i)
-        #     expect(a_user_doc).to have_property("hobbies").including(matching("golf"))
-        matcher :have_property do |prop_name|
-          match do |a_doc|
-            a_doc = JSON.load(a_doc) rescue a_doc
-
-
-            next false unless a_doc.key? prop_name
-
-            __value_matcher === a_doc.fetch(prop_name)
-          end
-
-          chain :that_is do |expected_val|
-            @value_matcher = expected_val
-          end
-
-          chain :matching do |val_pat|
-            @value_matcher = if Regexp === val_pat
-                               RSpec::Matchers::BuiltIn::Match.new val_pat
-                             else
-                               val_pat
-                             end
-          end
-
-          chain :including do |val_pat|
-            @value_matcher = RSpec::Matchers::BuiltIn::Include.new val_pat
-          end
-
-          failure_message do
-            msg = super()
-            if @value_matcher
-              msg + " " + @value_matcher.description.gsub(/^match /, "matching ")
-            end
-          end
-
-          define_method(:__value_matcher) do
-            @value_matcher || ->(*_){ true }
-          end
-        end
 
         # Check that the document has the specified relation (in
         # either the _links or _embedded sections.
