@@ -4,6 +4,17 @@ require 'hal-client'
 module RSpec
   module Hal
     module Matchers
+      require "rspec/hal/matchers/templated_relation_matcher"
+
+      # Examples
+      #
+      #     expect(doc).to have_templated_relation("search")
+      #     expect(doc).to have_templated_relation("search", matching("{?q}"))
+      #
+      def have_templated_relation(*args)
+        TemplatedRelationMatcher.new(*args)
+      end
+
       module Document
         extend RSpec::Matchers::DSL
 

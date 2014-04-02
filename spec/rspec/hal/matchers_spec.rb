@@ -8,8 +8,9 @@ describe RSpec::Hal::Matchers do
 
   specify { expect(subject.be_hal).to be_a_matcher }
   specify { expect(subject.be_hal_collection).to be_a_matcher }
-  specify { expect(subject.have_property).to be_a_matcher }
-  specify { expect(subject.have_relation).to be_a_matcher }
+  specify { expect(subject.have_property("name")).to be_a_matcher }
+  specify { expect(subject.have_templated_relation("search")).to be_a_matcher }
+  specify { expect(subject.have_relation("search")).to be_a_matcher }
 
   # Background/Support
   # ---
