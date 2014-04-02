@@ -35,6 +35,8 @@ Once you have the matchers included you can use it like this
       .including(a_hash_including('type' => 'sport'))
 
     expect(a_user_doc).to have_relation('tag')
+    expect(a_user_doc).to have_templated_relation("search")
+    expect(a_user_doc).to have_templated_relation("search", matching("{?q}"))
 ```
 
 ## Installation
