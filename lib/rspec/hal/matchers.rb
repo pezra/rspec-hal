@@ -4,6 +4,7 @@ require 'hal-client'
 module RSpec
   module Hal
     module Matchers
+      autoload :HalMatcherHelpers, "rspec/hal/matchers/hal_matcher_helpers"
       require "rspec/hal/matchers/templated_relation_matcher"
       require "rspec/hal/matchers/have_property_matcher"
 

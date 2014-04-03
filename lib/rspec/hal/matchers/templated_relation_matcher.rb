@@ -8,7 +8,9 @@ module RSpec
       #     expect(doc).to have_templated_relation("search", matching("{?q}"))
       #
       class TemplatedRelationMatcher
-        def initialize(link_rel, expected=nil)
+        include HalMatcherHelpers
+
+        def initialize(link_rel, expected=NullMatcher)
           @link_rel = link_rel
           @expected = expected
         end
@@ -37,15 +39,8 @@ module RSpec
                        else
                          "found none"
                        end
-          expected_clause = if expected != NullMatcher && expected.respond_to?(:description)
-                              expected.description
-                            elsif expected != NullMatcher
-                              "matching #{expected}"
-                            else
-                              "to exist"
-                            end
 
-          "Expected templated `#{link_rel}` link #{expected_clause} but #{but_clause}"
+          sentencize "Expected templated `#{link_rel}` link", expected.description, "but #{but_clause}"
         end
         alias_method :failure_message_for_should, :failure_message
 
@@ -60,27 +55,7 @@ module RSpec
 
         protected
 
-        attr_reader :link_rel, :outcome
-
-        NullMatcher = ->(_url_template){ true }
-
-        def expected
-          @expected ||= NullMatcher
-        end
-
-        def parse(jsonish)
-          json = if jsonish.kind_of? String
-                   jsonish
-
-                 elsif jsonish.respond_to? :to_hal
-                   jsonish.to_hal
-
-                 else jsonish.respond_to? :to_json
-                   jsonish.to_json
-                 end
-
-          HalClient::Representation.new(parsed_json: MultiJson.load(json))
-        end
+        attr_reader :link_rel, :outcome, :expected
       end
     end
   end

@@ -8,17 +8,7 @@ module RSpec
       #     expect(doc).to have_property("search", matching("Alice"))
       #
       class HavePropertyMatcher
-        NullMatcher = Class.new do
-          def matches(*args)
-            true
-          end
-          def ===(*args)
-            true
-          end
-          def description
-            ""
-          end
-        end.new
+        include HalMatcherHelpers
 
         def initialize(property_name, expected=NullMatcher)
           @prop_name = property_name
@@ -30,20 +20,6 @@ module RSpec
 
           repr.property?(prop_name) &&
             expected === repr.property(prop_name){ nil }
-        end
-
-        def matching(expected)
-          expected = if expected.respond_to? :description
-                       expected
-                     else
-                       RSpec::Matchers::BuiltIn::Match.new(expected)
-                     end
-          self.class.new(prop_name, expected)
-        end
-        alias_method :that_is, :matching
-
-        def including(expected)
-          self.class.new(prop_name, RSpec::Matchers::BuiltIn::Include.new(expected))
         end
 
         def failure_message
@@ -73,24 +49,25 @@ module RSpec
           "have property `#{prop_name}` #{@expected.description}"
         end
 
+
+        def matching(expected)
+          expected = if expected.respond_to? :description
+                       expected
+                     else
+                       RSpec::Matchers::BuiltIn::Match.new(expected)
+                     end
+          self.class.new(prop_name, expected)
+        end
+        alias_method :that_is, :matching
+
+        def including(expected)
+          self.class.new(prop_name, RSpec::Matchers::BuiltIn::Include.new(expected))
+        end
+
         protected
 
         attr_reader :prop_name, :outcome, :expected
 
-
-        def parse(jsonish)
-          json = if jsonish.kind_of? String
-                   jsonish
-
-                 elsif jsonish.respond_to? :to_hal
-                   jsonish.to_hal
-
-                 else jsonish.respond_to? :to_json
-                   jsonish.to_json
-                 end
-
-          HalClient::Representation.new(parsed_json: MultiJson.load(json))
-        end
       end
     end
   end
