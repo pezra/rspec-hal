@@ -17,7 +17,7 @@ describe RSpec::Hal::Matchers do
 
   matcher :be_a_matcher do
     match do |actual|
-      respond_to?(:matches?) && respond_to?(:failure_message)
+      actual.respond_to?(:matches?) && actual.respond_to?(:failure_message)
     end
   end
 end
@@ -37,15 +37,6 @@ describe RSpec::Hal::Matchers::Document do
     specify { expect(matcher.matches?("What's HAL?")).to be_falsey }
     specify { expect(matcher.matches?(hal_doc)).to be_falsey }
   end
-
-  describe "have_relation('tag')" do
-    subject(:matcher) { have_relation('tag') }
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-    specify { expect(matcher.matches?(bob)).to be_falsey}
-  end
-
 
   before do
     extend RSpec::Hal::Matchers::Document

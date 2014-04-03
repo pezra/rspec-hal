@@ -44,6 +44,21 @@ module RSpec
 
           HalClient::Representation.new(parsed_json: MultiJson.load(json))
         end
+
+        def matcherize(expected)
+          if matcher? expected
+            expected
+          elsif expected.kind_of? Regexp
+            RSpec::Matchers::BuiltIn::Match.new(expected)
+          else
+            RSpec::Matchers::BuiltIn::Eq.new(expected)
+          end
+        end
+
+        def matcher?(obj)
+          obj.respond_to?(:matches?) and (obj.respond_to?(:failure_message) or
+                                          obj.respond_to?(:failure_message_for_should))
+        end
       end
     end
   end

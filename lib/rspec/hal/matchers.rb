@@ -5,6 +5,7 @@ module RSpec
   module Hal
     module Matchers
       autoload :HalMatcherHelpers, "rspec/hal/matchers/hal_matcher_helpers"
+      require "rspec/hal/matchers/relation_matcher"
       require "rspec/hal/matchers/templated_relation_matcher"
       require "rspec/hal/matchers/have_property_matcher"
 
@@ -15,6 +16,22 @@ module RSpec
       #
       def have_templated_relation(*args)
         TemplatedRelationMatcher.new(*args)
+      end
+
+      # Signature
+      #
+      #     expect(doc).to have_relation(link_rel)
+      #     expect(doc).to have_relation(link_rel, href_matcher)
+      #     expect(doc).to have_relation(link_rel, template_variables)
+      #     expect(doc).to have_relation(link_rel, template_variables, href_matcher)
+      #
+      # Examples
+      #
+      #     expect(authors_doc).to have_relation("search",
+      #                                          {q: "Alice"},
+      #                                          match(%r|users/42|))
+      def have_relation(*args)
+        RelationMatcher.new(*args)
       end
 
       # Signature
@@ -89,45 +106,7 @@ module RSpec
             "Expected `$._embedded.item` to exist in:\n" + a_doc
           end
         end
-
-
-        # Check that the document has the specified relation (in
-        # either the _links or _embedded sections.
-        #
-        # Signature
-        #
-        #     expect(a_user_doc).to have_relation "tag"
-        matcher :have_relation do |link_rel|
-          match do |a_doc|
-            a_doc = JSON.load(a_doc) rescue a_doc
-            repr = HalClient::Representation.new(parsed_json: a_doc)
-
-            begin
-              repr.related_hrefs(link_rel) .any?{|an_href|
-                next true if !defined? @href_matcher
-                @href_matcher === an_href
-              }
-            rescue KeyError
-              false
-            end
-          end
-
-          chain :with_href do |expected_href|
-            (fail ArgumentError, "#{expected_href.inspect} must be a matcher") unless expected_href.respond_to? :matches?
-
-            @href_matcher = expected_href
-          end
-
-          failure_message do
-            msg = super()
-            if @href_matcher
-              msg + " with href " + @href_matcher.description.gsub(/^match /, "matching ")
-            end
-          end
-
-        end
       end
-
       include Document
     end
   end
