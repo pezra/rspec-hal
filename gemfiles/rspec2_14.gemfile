@@ -1,0 +1,7 @@
+source 'https://rubygems.org'
+
+gem "rspec", "~>2.14"
+
+# Specify your gem's dependencies in rspec-hal.gemspec
+gemspec
+
