@@ -84,8 +84,8 @@ describe RSpec::Hal::Matchers::HavePropertyMatcher do
     subject(:matcher) { described_class.new a_prop_name, eq("hector") }
     before do matcher.matches?(json_str_w_nonmatching_property) end
 
-    specify { expect(matcher.failure_message).to match(/property `#{a_prop_name}`/)
-      .and match(/eq "hector"/) }
+    specify { expect(matcher.failure_message).to match(/property `#{a_prop_name}`/) }
+    specify { expect(matcher.failure_message).to match(/eq "hector"/) }
   end
 
 
