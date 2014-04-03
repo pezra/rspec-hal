@@ -51,12 +51,7 @@ module RSpec
 
 
         def matching(expected)
-          expected = if expected.respond_to? :description
-                       expected
-                     else
-                       RSpec::Matchers::BuiltIn::Match.new(expected)
-                     end
-          self.class.new(prop_name, expected)
+          self.class.new(prop_name, matcherize(expected))
         end
         alias_method :that_is, :matching
 
