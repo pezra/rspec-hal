@@ -14,6 +14,11 @@ module RSpec
           end
         end.new
 
+        def repr=(jsonish)
+          @repr = parse jsonish
+        end
+        attr_reader :repr
+
         # Returns string composed of the specified clauses with proper
         # spacing between them. Empty and nil clauses are ignored.
         def sentencize(*clauses)

@@ -16,21 +16,25 @@ module RSpec
         end
 
         def matches?(jsonish)
-          repr = parse(jsonish)
+          self.repr = jsonish
 
           repr.raw_related_hrefs(link_rel){[]}
+            .tap{|it| if it.none?
+                        @outcome = :no_relations
+                        return false
+                      end }
             .select{|it| it.respond_to? :expand}
-            .select{|it| expected === it }
-            .any?
-            .tap do |outcome|
-              @outcome = if outcome
-                           :pass
-                         elsif repr.raw_related_hrefs(link_rel){[]}.any?
-                           :no_templates
-                         else
-                           :no_relations
-                         end
-            end
+            .tap{|it| if it.none?
+                        @outcome = :no_templates
+                        return false
+                      end }
+            .select{|it| expected === it.pattern }
+            .tap{|it| if it.none?
+                        @outcome = :none_matched
+                        return false
+                      end }
+
+          true
         end
 
         def failure_message

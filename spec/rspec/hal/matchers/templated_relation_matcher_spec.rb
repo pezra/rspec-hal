@@ -54,13 +54,13 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   end
 
   context "failed due to sub-matcher failure matcher" do
-    subject(:matcher) { described_class.new(a_link_rel, match("absent")) }
+    subject(:matcher) { described_class.new(a_link_rel, match(/absent/)) }
     before do
-      matcher.matches? json_str_wo_link
+      matcher.matches? json_str_w_link
     end
 
     specify { expect(matcher.failure_message)
-        .to match %r(Expected templated `#{a_link_rel}` link match(?:ing)? "absent" but found none) }
+        .to match %r(Expected templated `#{a_link_rel}` link match(?:ing)? /absent/ but found none) }
   end
 
 
