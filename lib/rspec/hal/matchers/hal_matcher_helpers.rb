@@ -3,15 +3,23 @@ module RSpec
     module Matchers
       module HalMatcherHelpers
         NullMatcher = Class.new do
-          def matches(*args)
+          def matches?(*args)
             true
           end
-          def ===(*args)
-            true
+
+          def failure_message
+            ""
           end
+          alias_method :failure_message_for_should, :failure_message
+
           def description
             ""
           end
+
+          def ===(*args)
+            true
+          end
+
         end.new
 
         def repr=(jsonish)

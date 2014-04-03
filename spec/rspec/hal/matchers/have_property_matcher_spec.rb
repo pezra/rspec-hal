@@ -78,9 +78,15 @@ describe RSpec::Hal::Matchers::HavePropertyMatcher do
     specify { expect(matcher.matches?(json_str_w_nonmatching_property)).to be_falsey}
   end
 
-
   specify { expect(matcher.description).to match "have property `#{a_prop_name}`" }
 
+  context "failed matcher" do
+    subject(:matcher) { described_class.new a_prop_name, eq("hector") }
+    before do matcher.matches?(json_str_w_nonmatching_property) end
+
+    specify { expect(matcher.failure_message).to match(/property `#{a_prop_name}`/)
+      .and match(/eq "hector"/) }
+  end
 
 
   # Background
@@ -122,5 +128,4 @@ describe RSpec::Hal::Matchers::HavePropertyMatcher do
 
   let(:any_matcher) { matching_prop_value_matcher }
   let(:matching_prop_value_matcher) { match "Alice" }
-  # let(:nonmatching_template_str_matcher) { match "hello" }
 end

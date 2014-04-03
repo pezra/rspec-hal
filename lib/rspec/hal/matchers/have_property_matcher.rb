@@ -12,36 +12,23 @@ module RSpec
 
         def initialize(property_name, expected=NullMatcher)
           @prop_name = property_name
-          @expected = expected
+          @expected = matcherize expected
         end
 
         def matches?(jsonish)
-          repr = parse(jsonish)
+          self.repr = jsonish
 
           repr.property?(prop_name) &&
             expected === repr.property(prop_name){ nil }
         end
 
         def failure_message
-          but_clause = if outcome == :no_templates
-                         "found only non-templated links"
-                       else
-                         "found none"
-                       end
-          expected_clause = if expected != NullMatcher && expected.respond_to?(:description)
-                              expected.description
-                            elsif expected != NullMatcher
-                              "matching #{expected}"
-                            else
-                              "to exist"
-                            end
-
-          "Expected templated `#{link_rel}` link #{expected_clause} but #{but_clause}"
+          sentencize "Expected property `#{prop_name}`", expected.description
         end
         alias_method :failure_message_for_should, :failure_message
 
         def failure_message_when_negated
-          "Expected `#{link_rel}` link to be absent or not templated"
+          sentencize "Expected property `#{prop_name}`", expected.description, "to be absent"
         end
         alias_method :failure_message_for_should_not, :failure_message_when_negated
 
