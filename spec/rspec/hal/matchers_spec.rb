@@ -17,7 +17,7 @@ describe RSpec::Hal::Matchers do
 
   matcher :be_a_matcher do
     match do |actual|
-      respond_to?(:matches?) && respond_to?(:failure_message)
+      actual.respond_to?(:matches?) && actual.respond_to?(:failure_message)
     end
   end
 end
@@ -37,50 +37,6 @@ describe RSpec::Hal::Matchers::Document do
     specify { expect(matcher.matches?("What's HAL?")).to be_falsey }
     specify { expect(matcher.matches?(hal_doc)).to be_falsey }
   end
-
-  describe "have_property('name')" do
-    subject(:matcher) { have_property('name') }
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-  end
-
-  describe "have_property('name').matching(/ice$/)" do
-    subject(:matcher) { have_property('name').matching(/ice$/) }
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-    specify { expect(matcher.matches?(bob)).to be_falsey}
-  end
-
-  describe "have_property('name').matching(end_with('ice'))" do
-    before do skip("RSpec 3 feature") unless /3\./ === RSpec::Version::STRING end
-    subject(:matcher) { have_property('name')
-        .matching(RSpec::Matchers::BuiltIn::EndWith.new("ice")) }
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-    specify { expect(matcher.matches?(bob)).to be_falsey}
-  end
-
-  describe "have_property('hobbies').including(a_hash_including('type' => 'sport'))" do
-    subject(:matcher) { have_property('hobbies')
-        .including(RSpec::Matchers::BuiltIn::Include.new('type' => 'sport')) }
-    before do extend described_class end
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-    specify { expect(matcher.matches?(bob)).to be_falsey}
-  end
-
-  describe "have_relation('tag')" do
-    subject(:matcher) { have_relation('tag') }
-
-    specify { expect(matcher.matches?(hal_doc)).to be_truthy}
-    specify { expect(matcher.matches?("{}")).to be_falsey}
-    specify { expect(matcher.matches?(bob)).to be_falsey}
-  end
-
 
   before do
     extend RSpec::Hal::Matchers::Document

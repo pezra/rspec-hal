@@ -28,7 +28,7 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
     end
 
     specify { expect(matcher.failure_message)
-        .to match "Expected templated `#{a_link_rel}` link to exist but found none" }
+        .to match "Expected templated `#{a_link_rel}` link but found none" }
     specify { expect(matcher.failure_message_for_should)
         .to match matcher.failure_message }
   end
@@ -50,17 +50,17 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
     end
 
     specify { expect(matcher.failure_message)
-        .to match "Expected templated `#{a_link_rel}` link to exist but found only non-templated links" }
+        .to match "Expected templated `#{a_link_rel}` link but found only non-templated links" }
   end
 
   context "failed due to sub-matcher failure matcher" do
-    subject(:matcher) { described_class.new(a_link_rel, matching("absent")) }
+    subject(:matcher) { described_class.new(a_link_rel, match("absent")) }
     before do
       matcher.matches? json_str_wo_link
     end
 
     specify { expect(matcher.failure_message)
-        .to match %(Expected templated `#{a_link_rel}` link matching "absent" but found none) }
+        .to match %r(Expected templated `#{a_link_rel}` link match(?:ing)? "absent" but found none) }
   end
 
 
