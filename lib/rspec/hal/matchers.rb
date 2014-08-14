@@ -8,6 +8,7 @@ module RSpec
       require "rspec/hal/matchers/relation_matcher"
       require "rspec/hal/matchers/templated_relation_matcher"
       require "rspec/hal/matchers/have_property_matcher"
+      require "rspec/hal/matchers/uri_template_has_variables_matcher"
 
       # Examples
       #
@@ -45,6 +46,20 @@ module RSpec
       #     expect(a_doc).to have_property("age").that_is kind_of Numeric
       def have_property(*args)
         HavePropertyMatcher.new(*args)
+      end
+
+      # Signature
+      #
+      #  expect(a_uri_template_str).to have_variables "q", "limit"
+      def have_variables(*args)
+        UriTemplateHasVariablesMatcher.new(*args)
+      end
+
+      # Signature
+      #
+      #  expect(a_uri_template_str).to has_variable "q"
+      def has_variable(*args)
+        UriTemplateHasVariablesMatcher.new(*args)
       end
 
       module Document
