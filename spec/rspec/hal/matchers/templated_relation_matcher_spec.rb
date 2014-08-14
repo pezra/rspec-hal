@@ -1,4 +1,5 @@
 require_relative "../../../spec_helper"
+require 'rspec/version'
 
 describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   describe "creation" do
@@ -22,8 +23,20 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
 
   specify { expect(matcher.description).to match "have templated #{a_link_rel} link" }
 
-  specify { expect(matcher.with_variables("since", "before")).to be_a_matcher }
-  specify { expect(matcher.with_variable("since")).to be_a_matcher }
+  context "in RSpec 3.x" do
+    before { skip("unsupported version") if /2\./ === RSpec::Version::STRING }
+
+    specify { expect(matcher.with_variables("since", "before")).to be_a_matcher }
+    specify { expect(matcher.with_variable("since")).to be_a_matcher }
+  end
+
+  context "in RSpec 3.x" do
+    before { skip("unsupported version") unless /2\./ === RSpec::Version::STRING }
+
+    specify { expect { matcher.with_variables("since", "before") }.to raise_exception(/version/) }
+
+    specify { expect { matcher.with_variable("since") }.to raise_exception(/version/) }
+  end
 
   context "failed due to missing relation matcher" do
     before do

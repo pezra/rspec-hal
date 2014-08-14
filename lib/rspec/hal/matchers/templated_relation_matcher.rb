@@ -61,6 +61,9 @@ module RSpec
         end
 
         def with_variables(*vars)
+          raise "This method is unsupported with RSpec version 2.x" unless
+            defined? RSpec::Matchers::BuiltIn::Compound::And
+
           RSpec::Matchers::BuiltIn::Compound::And.
             new(self, UriTemplateHasVariablesMatcher.new(self, vars))
         end
