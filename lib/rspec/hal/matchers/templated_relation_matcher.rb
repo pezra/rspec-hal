@@ -1,3 +1,6 @@
+require 'rspec/expectations'
+require 'rspec/hal/matchers/uri_template_has_variables_matcher'
+
 module RSpec
   module Hal
     module Matchers
@@ -55,6 +58,19 @@ module RSpec
 
         def description
           "have templated #{link_rel} link"
+        end
+
+        def with_variables(*vars)
+          raise "This method is unsupported with RSpec version 2.x" unless
+            defined? RSpec::Matchers::BuiltIn::Compound::And
+
+          RSpec::Matchers::BuiltIn::Compound::And.
+            new(self, UriTemplateHasVariablesMatcher.new(self, vars))
+        end
+        alias_method :with_variable, :with_variables
+
+        def uri_template
+          repr.raw_related_hrefs(link_rel){[]}.first
         end
 
         protected

@@ -1,4 +1,5 @@
 require_relative "../../../spec_helper"
+require 'rspec/version'
 
 describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   describe "creation" do
@@ -21,6 +22,21 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   specify{ expect(matcher.matches?(json_str_w_nontemplate_link)).not_to be }
 
   specify { expect(matcher.description).to match "have templated #{a_link_rel} link" }
+
+  context "in RSpec 3.x" do
+    before { skip("unsupported version") if /2\./ === RSpec::Version::STRING }
+
+    specify { expect(matcher.with_variables("since", "before")).to be_a_matcher }
+    specify { expect(matcher.with_variable("since")).to be_a_matcher }
+  end
+
+  context "in RSpec 3.x" do
+    before { skip("unsupported version") unless /2\./ === RSpec::Version::STRING }
+
+    specify { expect { matcher.with_variables("since", "before") }.to raise_exception(/version/) }
+
+    specify { expect { matcher.with_variable("since") }.to raise_exception(/version/) }
+  end
 
   context "failed due to missing relation matcher" do
     before do
@@ -105,4 +121,15 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   let(:any_template_str_matcher) { matching_template_str_matcher }
   let(:matching_template_str_matcher) { match "example.com" }
   let(:nonmatching_template_str_matcher) { match "hello" }
+
+  matcher :be_a_matcher do
+    match do |actual|
+      %w"matches?
+         description
+         failure_message
+         failure_message_when_negated".all? { |meth_name|
+        actual.respond_to? meth_name
+      }
+    end
+  end
 end
