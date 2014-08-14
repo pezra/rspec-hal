@@ -14,6 +14,7 @@ module RSpec
 
           expected_vars.subset? actual_vars
         end
+        alias_method :===, :matches?
 
         def description
           "have variables #{as_human_list(expected_vars)}"

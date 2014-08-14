@@ -39,6 +39,7 @@ module RSpec
 
           true
         end
+        alias_method :===, :matches?
 
         def failure_message
           but_clause = if outcome == :no_templates
