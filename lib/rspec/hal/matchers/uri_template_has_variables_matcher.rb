@@ -5,39 +5,47 @@ module RSpec
   module Hal
     module Matchers
       class UriTemplateHasVariablesMatcher
-        def initialize(a_tmpl_relation_matcher, vars)
-          @tmpl_matcher = a_tmpl_relation_matcher
+        def initialize(vars)
           @expected_vars = Set.new(vars)
         end
 
         def matches?(actual)
+          self.actual_tmpl = actual
+
           expected_vars.subset? actual_vars
         end
 
         def description
-          "have variables #{expected_vars.join(", ")}"
+          "have variables #{as_human_list(expected_vars)}"
         end
 
         def failure_message
-          "Expected #{actual_tmpl.to_s} to have #{expected_vars.join(", ")}"
+          "Expected #{actual_tmpl.pattern} to have #{as_human_list(expected_vars)}"
         end
 
         def failure_message_when_negated
-          "Expected #{actual_tmpl.to_s} not to have #{expected_vars.join(", ")}"
+          "Expected #{actual_tmpl.pattern} not to have #{as_human_list(expected_vars)}"
         end
 
         protected
 
-        attr_reader :tmpl_matcher, :expected_vars
+        attr_reader :tmpl_matcher, :expected_vars, :actual_tmpl
 
-        def actual_tmpl
-          Addressable::Template.new(tmpl_matcher.uri_template)
+        def actual_tmpl=(a_template)
+          @actual_tmpl = if a_template.respond_to? :pattern
+                           actual_tmpl
+                         else
+                           Addressable::Template.new(a_template)
+                         end
         end
 
         def actual_vars
           Set.new(actual_tmpl.variables)
         end
 
+        def as_human_list(enum)
+          enum.to_a.join(", ")
+        end
       end
     end
   end
