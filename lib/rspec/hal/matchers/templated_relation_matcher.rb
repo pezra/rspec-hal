@@ -1,3 +1,6 @@
+require 'rspec/expectations'
+require 'rspec/hal/matchers/uri_template_has_variables_matcher'
+
 module RSpec
   module Hal
     module Matchers
@@ -55,6 +58,16 @@ module RSpec
 
         def description
           "have templated #{link_rel} link"
+        end
+
+        def with_variables(*vars)
+          RSpec::Matchers::BuiltIn::Compound::And.
+            new(self, UriTemplateHasVariablesMatcher.new(self, vars))
+        end
+        alias_method :with_variable, :with_variables
+
+        def uri_template
+          repr.raw_related_hrefs(link_rel){[]}.first
         end
 
         protected

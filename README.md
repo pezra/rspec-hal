@@ -36,7 +36,7 @@ Once you have the matchers included you can use it like this
 
     expect(a_user_doc).to have_relation('tag')
     expect(a_user_doc).to have_templated_relation("search")
-    expect(a_user_doc).to have_templated_relation("search", matching("{?q}"))
+    expect(a_user_doc).to have_templated_relation("search").with_variables("q", "limit")
 ```
 
 ## Installation

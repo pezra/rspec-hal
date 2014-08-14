@@ -22,6 +22,9 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
 
   specify { expect(matcher.description).to match "have templated #{a_link_rel} link" }
 
+  specify { expect(matcher.with_variables("since", "before")).to be_a_matcher }
+  specify { expect(matcher.with_variable("since")).to be_a_matcher }
+
   context "failed due to missing relation matcher" do
     before do
       matcher.matches? json_str_wo_link
@@ -105,4 +108,15 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   let(:any_template_str_matcher) { matching_template_str_matcher }
   let(:matching_template_str_matcher) { match "example.com" }
   let(:nonmatching_template_str_matcher) { match "hello" }
+
+  matcher :be_a_matcher do
+    match do |actual|
+      %w"matches?
+         description
+         failure_message
+         failure_message_when_negated".all? { |meth_name|
+        actual.respond_to? meth_name
+      }
+    end
+  end
 end
