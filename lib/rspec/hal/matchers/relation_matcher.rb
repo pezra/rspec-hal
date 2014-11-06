@@ -17,7 +17,7 @@ module RSpec
         #     expect(doc).to have_relation link_rel, template_variables
         #     expect(doc).to have_relation link_rel, template_variables, href_matcher
         def initialize(link_rel, *args)
-          @link_rel = link_rel
+          @link_rel = link_rel.to_s
 
           @tmpl_vars, @expected = *if args.empty?
                                      [{},NullMatcher]

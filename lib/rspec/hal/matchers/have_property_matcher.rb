@@ -11,7 +11,7 @@ module RSpec
         include HalMatcherHelpers
 
         def initialize(property_name, expected=NullMatcher)
-          @prop_name = property_name
+          @prop_name = property_name.to_s
           @expected = matcherize expected
         end
 
