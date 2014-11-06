@@ -51,18 +51,15 @@ module RSpec
       # Signature
       #
       #  expect(a_uri_template_str).to have_variables "q", "limit"
+      #  expect(a_uri_template_str).to has_variable "q"
       def have_variables(*args)
         UriTemplateHasVariablesMatcher.new(*args)
       end
+      alias_method :has_variable,   :have_variables
+      alias_method :with_variables, :have_variables
+      alias_method :with_variable,  :have_variables
 
-      # Signature
-      #
-      #  expect(a_uri_template_str).to has_variable "q"
-      def has_variable(*args)
-        UriTemplateHasVariablesMatcher.new(*args)
-      end
-
-      module Document
+      module DocumentMatchers
         extend RSpec::Matchers::DSL
 
         # Provide a 3.0 compatible DSL methods for 2.x RSpec.
@@ -124,7 +121,8 @@ module RSpec
           end
         end
       end
-      include Document
+
+      include DocumentMatchers
     end
   end
 end

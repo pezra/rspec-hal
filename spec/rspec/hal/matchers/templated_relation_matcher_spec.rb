@@ -26,6 +26,13 @@ describe RSpec::Hal::Matchers::TemplatedRelationMatcher do
   specify { expect(matcher.with_variables("since", "before")).to be_a_matcher }
   specify { expect(matcher.with_variable("since")).to be_a_matcher }
 
+  context "symbol rel name" do
+    subject(:matcher) { described_class.new(a_link_rel.to_sym) }
+
+    specify{ expect(matcher.matches?(json_str_w_link)).to be }
+    specify{ expect(matcher.matches?(json_str_wo_link)).not_to be }
+  end
+
   context "failed due to missing relation matcher" do
     before do
       matcher.matches? json_str_wo_link

@@ -40,7 +40,7 @@ Rspec Hal allows very expressive validation of documents.
     expect(a_user_doc).to have_relation "knows", eq("http://example.com/jane")
 
     expect(a_user_doc).to have_templated_relation "checkBusy"
-    expect(a_user_doc).to have_templated_relation "checkBusy", has_variable("at")
+    expect(a_user_doc).to have_templated_relation "checkBusy", with_variable("at")
     expect(a_user_doc).to have_templated_relation("checkBusy").with_variables("at")
 ```
 
