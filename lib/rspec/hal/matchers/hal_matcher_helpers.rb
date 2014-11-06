@@ -2,6 +2,9 @@ module RSpec
   module Hal
     module Matchers
       module HalMatcherHelpers
+
+        # A matcher that always matches. Useful for avoiding special
+        # cases in value testing logic.
         NullMatcher = Class.new do
           def matches?(*args)
             true
@@ -58,16 +61,20 @@ module RSpec
           HalClient::Representation.new(parsed_json: MultiJson.load(json))
         end
 
+        # Returns `expected` coerced into an RSpec matcher
         def matcherize(expected)
           if matcher? expected
             expected
-          elsif expected.kind_of? Regexp
+
+          elsif expected.respond_to? :===
             RSpec::Matchers::BuiltIn::Match.new(expected)
+
           else
             RSpec::Matchers::BuiltIn::Eq.new(expected)
           end
         end
 
+        # Returns true if object is an RSpec matcher
         def matcher?(obj)
           obj.respond_to?(:matches?) and (obj.respond_to?(:failure_message) or
                                           obj.respond_to?(:failure_message_for_should))

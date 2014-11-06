@@ -14,7 +14,7 @@ module RSpec
         include HalMatcherHelpers
 
         def initialize(link_rel, expected=NullMatcher)
-          @link_rel = link_rel
+          @link_rel = link_rel.to_s
           @expected = expected
         end
 

@@ -22,7 +22,7 @@ describe RSpec::Hal::Matchers do
   end
 end
 
-describe RSpec::Hal::Matchers::Document do
+describe RSpec::Hal::Matchers::DocumentMatchers do
   describe "be_hal" do
     subject(:matcher) { be_hal }
 
@@ -45,7 +45,7 @@ describe RSpec::Hal::Matchers::Document do
   end
 
   before do
-    extend RSpec::Hal::Matchers::Document
+    extend described_class
   end
 
   let(:hal_collection) { <<-HAL }
