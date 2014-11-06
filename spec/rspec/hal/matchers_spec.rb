@@ -28,6 +28,12 @@ describe RSpec::Hal::Matchers::Document do
 
     specify { expect(matcher.matches?(hal_doc)).to be_truthy }
     specify { expect(matcher.matches?("What's HAL?")).to be_falsey }
+
+    context "failed matcher" do
+      before do matcher.matches?("What's HAL?") end
+
+      specify { expect(matcher.failure_message).to match "unexpected token" }
+    end
   end
 
   describe "be_hal_collection" do
