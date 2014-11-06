@@ -1,5 +1,5 @@
 module RSpec
   module Hal
-    VERSION = "1.3.3"
+    VERSION = "1.4.0"
   end
 end
