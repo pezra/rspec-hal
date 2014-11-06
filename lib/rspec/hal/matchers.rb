@@ -97,10 +97,12 @@ module RSpec
           failure_message do |a_json_doc|
             message = begin
                         JSON.load(a_json_doc)
-                      rescue err
+                      rescue => err
                         err.message
                       end
-            message + " while parsing:\n" + a_json_doc
+
+            "Expected a HAL document but it wasn't because #{message} in:\n" +
+              a_json_doc
           end
         end
 
