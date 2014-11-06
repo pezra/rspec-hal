@@ -13,7 +13,7 @@ Given the following string stored in `a_user_doc`.
  {
    "name": "Alice",
    "hobbies": [{"name": "Basketball", "type": "sport"},
-               {"name": "Basket weaving", "type": "craft"}]
+               {"name": "Basket weaving", "type": "craft"}],
    "_links": {
      "self": { "href": "http://example.com/alice" },
      "knows": [{ "href": "http://example.com/bob" },
