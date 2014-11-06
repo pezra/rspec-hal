@@ -32,11 +32,13 @@ Rspec Hal allows very expressive validation of documents.
     expect(a_user_doc).not_to be_hal_collection
 
     expect(a_user_doc).to have_property "name"
-    expect(a_user_doc).to have_property 'name', matching(/ice$/)
-    expect(a_user_doc).to have_property :name, end_with('ice')
+    expect(a_user_doc).to have_property 'name', eq("Alice")
+    expect(a_user_doc).to have_property :name, matching(/ice$/)
     expect(a_user_doc).to have_property 'hobbies', including(a_hash_including('type' => 'sport'))
 
     expect(a_user_doc).to have_relation "knows"
+    expect(a_user_doc).to have_relation "knows", eq("http://example.com/jane")
+
     expect(a_user_doc).to have_templated_relation "checkBusy"
     expect(a_user_doc).to have_templated_relation "checkBusy", has_variable("at")
     expect(a_user_doc).to have_templated_relation("checkBusy").with_variables("at")
