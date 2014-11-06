@@ -42,6 +42,8 @@ Rspec Hal allows very expressive validation of documents.
     expect(a_user_doc).to have_templated_relation "checkBusy"
     expect(a_user_doc).to have_templated_relation "checkBusy", has_variable("at")
     expect(a_user_doc).to have_templated_relation("checkBusy").with_variables("at")
+
+    expect(parse_hal(users_collection_doc).first).to have_property "name"
 ```
 
 Any matcher (actually anything that responds to `#===`) can
@@ -73,6 +75,7 @@ Then include the matchers by adding this to your spec_helper
 
 ```ruby
 RSpec.configuration.include RSpec::Hal::Matchers
+RSpec.configuration.include RSpec::Hal::Helpers
 ```
 
 (Don't forget to `require "rspec-hal"` if you are not using bundler.)
@@ -82,6 +85,7 @@ If you want to only include the matchers for certain type of specs
 
 ```ruby
 RSpec.configuration.include RSpec::Hal::Matchers, type: 'view'
+RSpec.configuration.include RSpec::Hal::Helpers, type: 'view'
 ```
 
 
