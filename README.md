@@ -18,7 +18,7 @@ Given the following string stored in `a_user_doc`.
      "self": { "href": "http://example.com/alice" },
      "knows": [{ "href": "http://example.com/bob" },
                { "href": "http://example.com/jane" }],
-     "checkBusy": { "href": "http://example.com/is_busy{?at}",
+     "checkBusy": { "href": "http://example.com/is_alice_busy{?at}",
                     "templated": true }
    }
  }
