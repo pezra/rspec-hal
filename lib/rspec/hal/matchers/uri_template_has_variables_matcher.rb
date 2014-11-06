@@ -6,7 +6,7 @@ module RSpec
     module Matchers
       class UriTemplateHasVariablesMatcher
         def initialize(vars)
-          @expected_vars = Set.new(vars)
+          @expected_vars = Set.new(vars.map(&:to_s))
         end
 
         def matches?(actual)

@@ -13,6 +13,13 @@ describe RSpec::Hal::Matchers::UriTemplateHasVariablesMatcher do
   specify { expect(matcher.matches?("http://example.com{?foo}")).to be_falsy }
   specify { expect(matcher.description).to match /foo, bar/ }
 
+  context "names as symbol" do
+    subject(:matcher) { described_class.new([:foo, :bar]) }
+
+    specify { expect(matcher.matches?("http://example.com{?foo,bar}")).to be_truthy }
+    specify { expect(matcher.matches?("http://example.com{?foo}")).to be_falsy }
+  end
+
   describe "failed matcher" do
     before do matcher.matches?("http://example.com{?foo}") end
 

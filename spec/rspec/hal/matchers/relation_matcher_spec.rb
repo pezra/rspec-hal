@@ -13,6 +13,13 @@ describe RSpec::Hal::Matchers::RelationMatcher do
   specify{ expect(matcher.matches?(json_str_w_link)).to be_truthy }
   specify{ expect(matcher.matches?(json_str_wo_link)).to be_falsey }
 
+  context "name as symbol" do
+    subject(:matcher) { described_class.new(a_link_rel.to_sym) }
+
+    specify{ expect(matcher.matches?(json_str_w_link)).to be_truthy }
+    specify{ expect(matcher.matches?(json_str_wo_link)).to be_falsey }
+  end
+
   context "curries" do
     let(:a_link_rel) { "http://example.com/rels/foo" }
     specify{ expect(matcher.matches?(json_str_w_curied_link)).to be_truthy }
@@ -77,7 +84,6 @@ describe RSpec::Hal::Matchers::RelationMatcher do
 
     specify{ expect(matcher.matches? json_str_w_link).to be_falsy }
   end
-
 
   context "failed due to missing relation matcher" do
     before do

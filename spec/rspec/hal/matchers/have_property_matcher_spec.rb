@@ -88,6 +88,13 @@ describe RSpec::Hal::Matchers::HavePropertyMatcher do
     specify { expect(matcher.failure_message).to match(/eq "hector"/) }
   end
 
+  context "name as symbol" do
+    subject(:matcher) { described_class.new(a_prop_name.to_sym) }
+
+    specify { expect(matcher.matches?(json_str_w_property)).to be_truthy}
+    specify { expect(matcher.matches?(json_str_wo_property)).to be_falsey}
+  end
+
 
   # Background
   # ---
