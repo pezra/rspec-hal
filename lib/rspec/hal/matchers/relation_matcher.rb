@@ -33,9 +33,9 @@ module RSpec
         def matches?(jsonish)
           repr = parse(jsonish)
 
-          repr.related_hrefs(link_rel, tmpl_vars){[]}
+          !repr.related_hrefs(link_rel, tmpl_vars){[]}
             .select{|it| expected === it }
-            .any?
+            .empty?
         end
 
         def failure_message
