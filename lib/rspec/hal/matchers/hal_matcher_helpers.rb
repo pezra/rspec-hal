@@ -1,7 +1,10 @@
+require 'forwardable'
+
 module RSpec
   module Hal
     module Matchers
       module HalMatcherHelpers
+        extend Forwardable
 
         # A matcher that always matches. Useful for avoiding special
         # cases in value testing logic.
@@ -29,6 +32,8 @@ module RSpec
           @repr = parse jsonish
         end
         attr_reader :repr
+
+        def_delegator :self, :matches?, :===
 
         # Returns string composed of the specified clauses with proper
         # spacing between them. Empty and nil clauses are ignored.
